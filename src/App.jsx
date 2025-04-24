@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import Barcode from 'react-barcode'; // Import the barcode generator
 import {
   CameraIcon, CheckCircle2, Loader2, Upload, Moon, Sun, Clipboard, Trash2, Download
 } from 'lucide-react';
@@ -10,6 +11,7 @@ const BarcodeScanner = () => {
   const [scanning, setScanning] = useState(true);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [barcodeText, setBarcodeText] = useState(''); // State to hold barcode text
 
   const startCamera = (html5QrCode, cameraId) => {
     html5QrCode.start(
@@ -92,6 +94,8 @@ const BarcodeScanner = () => {
 
   const clearHistory = () => setHistory([]);
 
+  const handleBarcodeTextChange = (e) => setBarcodeText(e.target.value); // Handle barcode text input
+
   return (
     <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} min-h-screen py-6 px-4`}>
       <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 relative">
@@ -145,6 +149,23 @@ const BarcodeScanner = () => {
             </div>
           </div>
         )}
+
+        {/* Barcode Generator Section */}
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-2">Generate Barcode</h3>
+          <input
+            type="text"
+            value={barcodeText}
+            onChange={handleBarcodeTextChange}
+            className="w-full p-2 border rounded-md mb-4"
+            placeholder="Enter text to generate barcode"
+          />
+          {barcodeText && (
+            <div className="flex justify-center">
+              <Barcode value={barcodeText} />
+            </div>
+          )}
+        </div>
 
         {history.length > 0 && (
           <div>
